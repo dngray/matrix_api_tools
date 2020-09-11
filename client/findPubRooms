@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Usage
+# ./findPubRooms chat.example.com {{ search term }}
+# https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-publicrooms
+#
+# Notes
+# Must specify a user agent for this one:
+# https://github.com/matrix-org/python-canonicaljson/issues/33
+
+. ../credentials
+
+findPubRooms() {
+    curl -A 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0' \
+         -H "Authorization: Bearer $accessToken" \
+         --data '{"filter":{"generic_search_term":"'"$2"'"}}' \
+         -X POST 'https://'"$1":"$matrixServerPort"'/_matrix/client/r0/publicRooms' | jq -r
+}
+findPubRooms "$1" "$2"

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Usage
+# ./getACL chat.example.com roomid:example.com
+# https://matrix.org/docs/spec/client_server/latest#m-room-server-acl
+
+. ../credentials
+
+getACL() {
+    curl -H "Authorization: Bearer $accessToken" \
+         -X GET 'https://'"$1":"$matrixServerPort"'/_matrix/client/r0/rooms/%21'"$2"'/state/m.room.server_acl/' | jq -r
+}
+getACL "$1" "$2"

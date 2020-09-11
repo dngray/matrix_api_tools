@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Usage
+# ./getRoomInfo room:id
+# https://github.com/matrix-org/synapse/blob/master/docs/admin_api/rooms.md#draft-room-details-api
+
+. ../credentials
+
+getRoomInfo() {
+    curl -H "Authorization: Bearer $accessToken" \
+         -X GET 'https://'"$matrixServer":"$matrixServerPort"'/_synapse/admin/v1/rooms/%21'"$1"''
+}
+getRoomInfo "$1"

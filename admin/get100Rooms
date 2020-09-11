@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Usage
+# ./get100Rooms
+# https://github.com/matrix-org/synapse/blob/master/docs/admin_api/rooms.md#usage
+#
+# Notes
+# Must specify a user agent for this one:
+# https://github.com/matrix-org/python-canonicaljson/issues/33
+
+. ../credentials
+
+get100Rooms() {
+    curl -A 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0' \
+         -H "Authorization: Bearer $accessToken" \
+         -X GET 'https://'"$matrixServer":"$matrixServerPort"'/_synapse/admin/v1/rooms?order_by=size&from=100' | jq -r
+}
+get100Rooms

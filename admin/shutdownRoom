@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Usage
+# ./shutdownRoom room:id
+# https://github.com/matrix-org/synapse/blob/master/docs/admin_api/shutdown_room.md
+
+. ../credentials
+
+shutdownRoom() {
+    curl -H "Authorization: Bearer $accessToken" \
+         --data '{ "new_room_user_id": "'$admin'", "room_name": "Content Violation Notification", "message": "A room you were in has been shutdown due to content violations on this server. Please review our Terms of Service." }' \
+         -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_synapse/admin/v1/shutdown_room/%21'"$1"''
+}
+shutdownRoom "$1"

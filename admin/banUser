@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Usage
+# ./banUser @user:example.com
+# https://github.com/matrix-org/synapse/blob/master/docs/admin_api/user_admin_api.rst#deactivate-account
+
+. ../credentials
+
+banUser() {
+    curl -H "Authorization: Bearer $accessToken" \
+         --data '{ "erase": true }' \
+         -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_synapse/admin/v1/deactivate/'"$1"''
+}
+banUser "$1"

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Usage
+# ./purgeRoom room:id
+# https://github.com/matrix-org/synapse/blob/master/docs/admin_api/purge_room.md
+
+. ../credentials
+
+purgeRoom() {
+    curl -H "Authorization: Bearer $accessToken" \
+         --data '{ "room_id": "!'"$1"'" }' \
+         -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_synapse/admin/v1/purge_room'
+}
+purgeRoom "$1"

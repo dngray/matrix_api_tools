@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Usage
+# ./deleteRoom room:id
+# https://github.com/matrix-org/synapse/blob/master/docs/admin_api/rooms.md#delete-room-api
+
+. ../credentials
+
+deleteRoom() {
+    curl -H "Authorization: Bearer $accessToken" \
+         --data '{ "new_room_user_id": "'$admin'", "room_name": "Content Violation Notification", "message": "A room you were in has been shutdown due to content violations on this server. Please review our Terms of Service.", "block": true, "purge": true }' \
+         -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_synapse/admin/v1/rooms/%21'"$1"'/delete'
+}
+deleteRoom "$1"

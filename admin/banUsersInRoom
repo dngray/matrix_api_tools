@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Usage
+# ./banUsersInRoom room:id
+
+. ../credentials
+. ./getUsers
+. ./banUser
+
+banUsersInRoom() {
+    usersOnMyServer=$(getUsers "$1" | jq -r --arg ad "$accountDomain" '.members[] | select(. | contains($ad))')
+
+    for user in $usersOnMyServer; do
+        banUser "$user"
+    done
+}
+banUsersInRoom "$1"
