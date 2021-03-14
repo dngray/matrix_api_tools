@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Usage
+# ./syncMatrix chat.example.com
+
+. ../credentials
+
+syncMatrix() {
+    #curl -H "Authorization: Bearer $accessToken" \
+    #     -X GET 'https://'"$1":"$matrixServerPort"'/_matrix/client/r0/joined_rooms' |
+    #     jq -r '.joined_rooms[]'
+
+    curl -H "Authorization: Bearer $accessToken" \
+         -X GET 'https://'"$1":"$matrixServerPort"'/_matrix/client/r0/sync' |
+         jq -r '.' > syncedData.json
+
+}
+syncMatrix "$1"
