@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Usage
+# ./getUsersFromServer roomid:example.com
+# export users to users.json
+
+. ../credentials
+
+getUsersFromServer() {
+    curl -A 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0' \
+         -H "Authorization: Bearer $accessToken" \
+         -X GET 'https://'"$matrixServer":"$matrixServerPort"'/_matrix/client/r0/rooms/%21'"$1"'/members?&membership=join&not_membership=leave' |
+         jq -r --arg server $2 '.chunk[] | select(.sender | contains($server)) | .sender'
+     }
+getUsersFromServer $1 $2

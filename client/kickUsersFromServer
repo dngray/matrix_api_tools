@@ -1,24 +1,24 @@
 #!/bin/sh
 
 # Usage
-# ./kickUsers chat.example.com roomid:example.com
+# ./kickUsers roomid:example.com <server to filter>
 # https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-kick
 
 . ../credentials
-. ./getUsers
+. ./getUsersFromServer
 
 exclude=""
 
-users=$(getUsers)
+users=$(getUsersFromServer $1 $2)
 
 kickUsers() {
     for user in $users; do
-        echo "$user"
         curl -A 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0' \
              -H "Authorization: Bearer $accessToken" \
              -H "Content-Type: application/json" \
              --data '{"reason":"Clearing old privacytools.io accounts","user_id":"'"$user"'"}' \
-             -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_matrix/client/r0/rooms/%21'"$2"'/kick' | jq -r
+             -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_matrix/client/r0/rooms/%21'"$1"'/kick'
+        echo "$user"
     done
 }
-kickUsers
+kickUsers $1 $2
