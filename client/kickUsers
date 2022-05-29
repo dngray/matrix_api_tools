@@ -7,18 +7,16 @@
 . ../credentials
 . ./getUsers
 
-exclude=""
-
-users=$(getUsers)
+users=$(getUsers $1)
 
 kickUsers() {
     for user in $users; do
-        echo "$user"
         curl -A 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0' \
              -H "Authorization: Bearer $accessToken" \
              -H "Content-Type: application/json" \
-             --data '{"reason":"Clearing old privacytools.io accounts","user_id":"'"$user"'"}' \
-             -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_matrix/client/r0/rooms/%21'"$2"'/kick' | jq -r
+             --data '{"reason":"Join our new rooms and our space #privacyguides:matrix.org","user_id":"'"$user"'"}' \
+             -X POST 'https://'"$matrixServer":"$matrixServerPort"'/_matrix/client/r0/rooms/%21'"$1"'/kick'
+        echo "$user"
     done
 }
-kickUsers
+kickUsers $1

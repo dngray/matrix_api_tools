@@ -10,6 +10,6 @@ getUsers() {
     curl -A 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0' \
          -H "Authorization: Bearer $accessToken" \
          -X GET 'https://'"$matrixServer":"$matrixServerPort"'/_matrix/client/r0/rooms/%21'"$1"'/members?&membership=join&not_membership=leave' |
-         jq -r '.chunk[] | .sender' > users.json
+         jq -r --arg me "$admin" '.chunk[] | .sender | del(. | select(. == $me))'
      }
 getUsers $1
